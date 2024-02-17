@@ -10,7 +10,7 @@ namespace JavidRaceto21DO
     public class Game
     {
 
-        
+
 
 
         //Creates list of players after getting number playing and asks their name
@@ -31,17 +31,21 @@ namespace JavidRaceto21DO
             Console.WriteLine("There are " + numberOfplayers + " playing");
             Console.WriteLine();
 
+            // Getting number of players using int obtained above
 
-            for (int i = 0;  i < numberOfplayers; i++)
+            for (int i = 0; i < numberOfplayers; i++)
             {
-                
+
                 players.Add(new Player());
             }
+
             // Delete this comment when done for testing
             Console.WriteLine("There is still " + players.Count + " playing Javid, relax");
-            
-            
-            foreach(Player player in players)
+
+
+            //Getting player names
+
+            foreach (Player player in players)
             {
                 Console.WriteLine();
                 //Added + 1 because indexes start at 0
@@ -51,14 +55,53 @@ namespace JavidRaceto21DO
                 Console.WriteLine("" + player.name + " is now playing");
                 Console.WriteLine("+++++++++++++++++++++++++++++");
             }
-        
-        
+
+            //Setting waging / difficulty
+
+            foreach (Player player in players)
+            {
+                while (player.askedAboutBetting == false)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("" + player.name + "Are you interested in placing a wager? Enter (Y) for yes or (N) for no");
+                    string response = Console.ReadLine();
+                    if (response.ToUpper().StartsWith("Y"))
+                    {
+                        Console.WriteLine("" + player.name + "is beginning with $100 betting money");
+                        Console.WriteLine();
+                        player.isBetting = true;
+                        player.askedAboutBetting = true;
+
+                    }
+                    else if (response.ToUpper().StartsWith("N"))
+                    {
+                        Console.WriteLine("" + player.name + "is just playing for fun");
+                        Console.WriteLine();
+                        player.isBetting = false;
+                        player.askedAboutBetting = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please Enter (Y) for yes or (N) for no");
+                    }
+                }
+
+                
+            }
+            Console.WriteLine("Thats as far as you got");
         }
-
-
-
-
-
     }
-
 }
+
+
+
+            
+
+
+        
+
+
+
+
+
+    
