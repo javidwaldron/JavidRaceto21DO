@@ -10,18 +10,15 @@ namespace JavidRaceto21DO
     public class Game
     {
 
+        bool gameEnd = false;
+        bool roundEnd = false;
 
+        List<Player> players = new List<Player>();
 
-
-        //Creates list of players after getting number playing and asks their name
+        //Begin from here, move welcome to 21 to beginning of program later
         public void Setup()
         {
-            List<Player> players = new List<Player>();
-
-            Console.WriteLine("Welcome to Race to 21!");
-            Console.WriteLine();
-            Console.WriteLine("                               _____\r\n   _____                _____ |6    |\r\n  |2    | _____        |5    || o o | \r\n  |  o  ||3    | _____ | o o || o o | _____\r\n  |     || o o ||4    ||  o  || o o ||7    |\r\n  |  o  ||     || o o || o o ||____6|| o o | _____\r\n  |____2||  o  ||     ||____5|       |o o o||8    | _____\r\n         |____3|| o o |              | o o ||o o o||9    |\r\n                |____4|              |____7|| o o ||o o o|\r\n                                            |o o o||o o o|\r\n                                            |____8||o o o|\r\n                                                   |____9|\r\n");
-            Console.WriteLine();
+            
             Console.WriteLine("How many players?");
             Console.WriteLine();
             int numberOfplayers = int.Parse(Console.ReadLine());
@@ -31,8 +28,7 @@ namespace JavidRaceto21DO
             Console.WriteLine("There are " + numberOfplayers + " playing");
             Console.WriteLine();
 
-            // Getting number of players using int obtained above
-
+            // Getting number of players using int obtained 
             for (int i = 0; i < numberOfplayers; i++)
             {
 
@@ -40,34 +36,35 @@ namespace JavidRaceto21DO
             }
 
             // Delete this comment when done for testing
-            Console.WriteLine("There is still " + players.Count + " playing Javid, relax");
-
+            Console.WriteLine("++++++++++++++++++++++++++++++++++");
+            Console.WriteLine();
 
             //Getting player names
-
             foreach (Player player in players)
             {
-                Console.WriteLine();
+                
                 //Added + 1 because indexes start at 0
-                Console.WriteLine("Ok player " + (players.IndexOf(player) + 1) + " , what is your name? ");
+                Console.Write("Ok player " + (players.IndexOf(player) + 1) + " , what is your name? ");
                 player.name = Console.ReadLine();
-                Console.WriteLine();
-                Console.WriteLine("" + player.name + " is now playing");
-                Console.WriteLine("+++++++++++++++++++++++++++++");
+                
             }
 
-            //Setting waging / difficulty
-
+            Console.WriteLine();
+            Console.WriteLine("+++++++++++++++++++++++++++++");
+            
+            
+            //Setting waging, while all players will begin with 100 not revealed or displayed for not betting people
             foreach (Player player in players)
             {
                 while (player.askedAboutBetting == false)
                 {
                     Console.WriteLine();
-                    Console.WriteLine("" + player.name + "Are you interested in placing a wager? Enter (Y) for yes or (N) for no");
+                    Console.Write("" + player.name + ", are you interested in placing a wager? Enter (Y) for yes or (N) for no : ");
                     string response = Console.ReadLine();
+                    
                     if (response.ToUpper().StartsWith("Y"))
                     {
-                        Console.WriteLine("" + player.name + "is beginning with $100 betting money");
+                        Console.WriteLine("" + player.name + ", is beginning with $100 betting money!");
                         Console.WriteLine();
                         player.isBetting = true;
                         player.askedAboutBetting = true;
@@ -75,7 +72,7 @@ namespace JavidRaceto21DO
                     }
                     else if (response.ToUpper().StartsWith("N"))
                     {
-                        Console.WriteLine("" + player.name + "is just playing for fun");
+                        Console.WriteLine("" + player.name + ", is just playing for fun!");
                         Console.WriteLine();
                         player.isBetting = false;
                         player.askedAboutBetting = true;
@@ -86,11 +83,153 @@ namespace JavidRaceto21DO
                     }
                 }
 
-                
+
             }
-            Console.WriteLine("Thats as far as you got");
+
         }
+    // Essentially where offer a card is, asked if they want to be dealt a card or three in a turn
+        public void CoreGame()
+        {
+
+            //While the game isnt over
+            while (roundEnd ==  false)
+            {
+                // For every player playing
+                foreach (Player player in players)
+                {
+                    //Ask would you like to play
+                    Console.Write("" + player.name + ", would you like to be dealt in? Enter (Y) for yes or (N) for no : ");
+                    string response = Console.ReadLine();
+
+                    //If player says yes and wants a card
+                    if (response.ToUpper().StartsWith("Y"))
+                    {
+                        // Goes through check to see if they want the one card or three card version
+                        while (player.askedAboutThreeCard == false && player.isActive == true)
+                        {
+
+                            Console.Write("Would you like one card or three? Enter (1) to be dealt one card at a time, or (3) for three at a time : ");
+                            string cardamountresponse = Console.ReadLine();
+                            
+                            // Sets game for player to be based on individual cards
+                            if (cardamountresponse == "1")
+                            {
+                                player.askedAboutThreeCard = true;
+                                
+                                //While player score is under 21 will deal card then keep asking if they want another until no
+                                while (player.score < 21 && player.isActive == true)
+                                {
+                                    
+                                    Console.WriteLine(""+ player.name + " , would you like a card? Enter (Y) for yes or (N) for no. : ");
+                                    string anotherResponse = Console.ReadLine();
+                                    
+                                   
+                                    if (anotherResponse.ToUpper().StartsWith("Y"))
+                                    {
+                                        Console.WriteLine("Add Card PlaceHolder");
+                                        Console.WriteLine("Showcard placeholder");
+                                        Console.WriteLine("Update Player Score");
+                                    }
+                                else if (anotherResponse.ToUpper().StartsWith("N"))
+                                    {
+                                        player.isStaying = true;
+                                        player.isActive = false;
+                                    }
+                                 else
+                                    {
+                                        Console.WriteLine("Please Enter either (Y) for yes or (N) for no : ");
+                                    }
+                                
+                                }
+                                // When player score is equal to 21 they win automatically and the game ends
+                                if (player.score == 21)
+                                {
+                                    player.hasWon = true;
+                                    gameEnd = true;
+                                }
+                                //If a player busts they lose automatically and the gme ends
+                                if (player.score > 21)
+                                {
+                                    player.isActive = false;
+                                    player.isBust = true;
+                                    gameEnd = true;
+                                }
+                            }
+                            // Sets game for player to be based on three cards
+                            else if (cardamountresponse == "3")
+                            {
+                                Console.WriteLine("Add Card x3 Placeholder");
+                                Console.WriteLine("Showcard placeholder");
+                                Console.WriteLine("Update Player Score");
+                                player.askedAboutThreeCard = true;
+                            }
+                            //Reprimands to Enter one of the two acceptable options
+                            else
+                            {
+                                Console.WriteLine("Please Enter either 1 or 3");
+                            }
+                        }
+                   
+                    //Player says No and sits out Round
+                    }
+                    else if (response.ToUpper().StartsWith("N")) 
+                    {
+
+                        Console.WriteLine("" + player.name + " , is staying out this round .");
+                        player.isActive = false;
+                    
+                    }
+
+                    if (!players.Contains(player.isActive))
+                    {
+
+                    }
+
+                }
+                
+                
+
+
+            }
+            if (roundEnd == true)
+            {
+                foreach (Player player in players)
+                {
+                    // Calculate score mechanic
+                    //Declare Winner
+                    //Ask to play again
+                    Console.Write("Would you like to play again? (Y) for yes and (N) for no. : ");
+                    string playagain = Console.ReadLine();
+
+                    if (playagain.ToUpper().StartsWith("Y"))
+                    {
+                        player.isActive = true;
+
+                    }
+                    else if (playagain.ToUpper().StartsWith("N"))
+                    {
+                        player.isActive = false;
+                    }
+                    else
+                    {
+                        Console.Write("Please Enter (Y) for yes or (N) for no. : ");
+                    }
+                }
+
+            }
+
+        }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     }
+
 }
 
 
