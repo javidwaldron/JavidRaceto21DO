@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,15 +11,15 @@ namespace JavidRaceto21DO
     public class Game
     {
 
-        bool gameEnd = false;
-        bool roundEnd = false;
+       public bool gameEnd = false;
+       public bool roundEnd = false;
 
         List<Player> players = new List<Player>();
 
         //Begin from here, move welcome to 21 to beginning of program later
         public void Setup()
         {
-            
+            gameEnd = false;
             Console.WriteLine("How many players?");
             Console.WriteLine();
             int numberOfplayers = int.Parse(Console.ReadLine());
@@ -90,13 +91,19 @@ namespace JavidRaceto21DO
     // Essentially where offer a card is, asked if they want to be dealt a card or three in a turn
         public void CoreGame()
         {
+            // Using turn ints to tell when everyone has gone
+            int turn = 0;
+            //Creating a list within a list for round by round play
+            List<Player> currentPlayers = new List<Player>();
 
             //While the game isnt over
             while (roundEnd ==  false)
             {
-                // For every player playing
+                // For every player playing in game
                 foreach (Player player in players)
                 {
+                    //Adding a smaller list of players for individual rounds
+                    
                     //Ask would you like to play
                     Console.Write("" + player.name + ", would you like to be dealt in? Enter (Y) for yes or (N) for no : ");
                     string response = Console.ReadLine();
@@ -104,6 +111,10 @@ namespace JavidRaceto21DO
                     //If player says yes and wants a card
                     if (response.ToUpper().StartsWith("Y"))
                     {
+                        //Adding a smaller list of players for individual rounds
+                        currentPlayers.Add(player);
+
+
                         // Goes through check to see if they want the one card or three card version
                         while (player.askedAboutThreeCard == false && player.isActive == true)
                         {
@@ -123,7 +134,7 @@ namespace JavidRaceto21DO
                                     Console.WriteLine(""+ player.name + " , would you like a card? Enter (Y) for yes or (N) for no. : ");
                                     string anotherResponse = Console.ReadLine();
                                     
-                                   
+                                   //If player takes card is under 21 score and active all the code happens and will repeat until....
                                     if (anotherResponse.ToUpper().StartsWith("Y"))
                                     {
                                         Console.WriteLine("Add Card PlaceHolder");
@@ -134,6 +145,7 @@ namespace JavidRaceto21DO
                                     {
                                         player.isStaying = true;
                                         player.isActive = false;
+                                        turn++;
                                     }
                                  else
                                     {
@@ -141,18 +153,19 @@ namespace JavidRaceto21DO
                                     }
                                 
                                 }
-                                // When player score is equal to 21 they win automatically and the game ends
+                                // When player score is equal to 21 they win automatically and the game ends ***Revist has won***
                                 if (player.score == 21)
                                 {
                                     player.hasWon = true;
-                                    gameEnd = true;
+                                    roundEnd = true;
+                                    turn++;
                                 }
-                                //If a player busts they lose automatically and the gme ends
+                                //If a player busts they lose automatically and turn ends
                                 if (player.score > 21)
                                 {
                                     player.isActive = false;
                                     player.isBust = true;
-                                    gameEnd = true;
+                                    turn++;
                                 }
                             }
                             // Sets game for player to be based on three cards
@@ -162,6 +175,26 @@ namespace JavidRaceto21DO
                                 Console.WriteLine("Showcard placeholder");
                                 Console.WriteLine("Update Player Score");
                                 player.askedAboutThreeCard = true;
+
+                                if (player.score == 21)
+                                {
+                                    player.hasWon = true;
+                                    roundEnd = true;
+                                    turn++;
+                                }
+                                //If a player busts they lose automatically and turn ends
+                                if (player.score > 21)
+                                {
+                                    player.isActive = false;
+                                    player.isBust = true;
+                                    turn++;
+                                }
+                                else
+                                {
+                                    player.isActive = false;
+                                    turn++;
+                                }
+
                             }
                             //Reprimands to Enter one of the two acceptable options
                             else
@@ -170,18 +203,19 @@ namespace JavidRaceto21DO
                             }
                         }
                    
-                    //Player says No and sits out Round
+                    //Player says no and sits out Round
                     }
                     else if (response.ToUpper().StartsWith("N")) 
                     {
 
-                        Console.WriteLine("" + player.name + " , is staying out this round .");
-                        player.isActive = false;
+                        Console.WriteLine("" + player.name + " , is staying out this round.");
+                        currentPlayers.Remove(player);
                     
                     }
-
-                    if (!players.Contains(player.isActive))
+                    // If every outcome has happened, adds an int. if it equals the total items in current player list, round ends
+                    if (turn == currentPlayers.Count)
                     {
+                        roundEnd = true;
 
                     }
 
@@ -191,28 +225,63 @@ namespace JavidRaceto21DO
 
 
             }
+            //Round is up due to everyone having gone
             if (roundEnd == true)
             {
-                foreach (Player player in players)
+                foreach (Player player in currentPlayers)
                 {
                     // Calculate score mechanic
                     //Declare Winner
-                    //Ask to play again
-                    Console.Write("Would you like to play again? (Y) for yes and (N) for no. : ");
+                   
+                    currentPlayers.Clear();
+                    turn = 0;
+                    Console.Write("Would you like to play another round (Y) for yes and (N) for no. : ");
                     string playagain = Console.ReadLine();
 
+
+                    //Do you want to play again, if yes adds back to the current players
                     if (playagain.ToUpper().StartsWith("Y"))
                     {
+
+                        currentPlayers.Add(player);
                         player.isActive = true;
+                        player.score = 0;
+
 
                     }
+                    //If you dont want to play again removes from current players/
                     else if (playagain.ToUpper().StartsWith("N"))
                     {
+                        currentPlayers.Remove(player);
                         player.isActive = false;
                     }
+                    //Reprimanding bad input
                     else
                     {
                         Console.Write("Please Enter (Y) for yes or (N) for no. : ");
+                    }
+                }
+                // If there are no current players, ask if they want to start a new game
+                if (currentPlayers.Count == 0)
+                {
+                    Console.WriteLine("There is no one who wants to continue this round. Start a new game? Enter (Y) for yes or (N) for no : ");
+                    string playAgainResponse = Console.ReadLine();
+
+                    if(playAgainResponse.ToUpper().StartsWith("Y"))
+                    {
+                        Console.WriteLine("Start game over again code here");
+                        players.Clear();
+                        gameEnd = true;
+
+                    }
+                   else if(playAgainResponse.ToUpper().StartsWith("N"))
+                    {
+                        Console.WriteLine("Enter code to end game");
+                        
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please Enter a (Y) for yes or (N) for no : ");
                     }
                 }
 

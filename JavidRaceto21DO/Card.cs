@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace JavidRaceto21DO
 {
-    internal class Card
+     class Card
     {
-
+      public string ID;
+      public string name;
     }
 }
