@@ -13,7 +13,7 @@ namespace JavidRaceto21DO
         
 
 
-
+        //Creates list of players after getting number playing and asks their name
         public void Setup()
         {
             List<Player> players = new List<Player>();
@@ -37,9 +37,20 @@ namespace JavidRaceto21DO
                 
                 players.Add(new Player());
             }
+            // Delete this comment when done for testing
+            Console.WriteLine("There is still " + players.Count + " playing Javid, relax");
             
-            Console.WriteLine("There is still " + players.Count + "playing Javid");
-        
+            
+            foreach(Player player in players)
+            {
+                Console.WriteLine();
+                //Added + 1 because indexes start at 0
+                Console.WriteLine("Ok player " + (players.IndexOf(player) + 1) + " , what is your name? ");
+                player.name = Console.ReadLine();
+                Console.WriteLine();
+                Console.WriteLine("" + player.name + " is now playing");
+                Console.WriteLine("+++++++++++++++++++++++++++++");
+            }
         
         
         }

@@ -12,8 +12,12 @@ namespace JavidRaceto21DO
         List<Card> cardsInHand = new List<Card>();
         public string name;
         int bettingMoney = 100;
-        bool isBetting = false;
 
+        bool isBetting = false;
+        bool isActive = true;
+        bool isBust = false;
+        bool isStaying = false;
+        
 
     }
 }
