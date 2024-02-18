@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,11 +113,12 @@ namespace JavidRaceto21DO
                 foreach (Player player in players)
                 {
                     //To stop it asking players who said no to playing another round
-                    if (player.isActive == true)
+                    if (player.isActive == true &&)
                     {
                         //Adding a smaller list of players for individual rounds
                         Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
                         Console.WriteLine();
+                      
                         //Ask would you like to play
                         Console.Write("" + player.name + ", would you like to be dealt in? Enter (Y) for yes or (N) for no : ");
                         string response = Console.ReadLine();
@@ -143,7 +145,7 @@ namespace JavidRaceto21DO
                                         player.askedAboutThreeCard = true;
 
                                         //While player score is under 21 will deal card then keep asking if they want another until no
-                                        while (player.score < 21 && player.isActive == true)
+                                        while (player.score < 21 && player.isActive == true && roundEnd == false)
                                         {
 
                                             Console.Write("" + player.name + ", would you like a card? Enter (Y) for yes or (N) for no. : ");
@@ -190,6 +192,7 @@ namespace JavidRaceto21DO
                                         //If a player busts they lose automatically and turn ends
                                         if (player.score > 21)
                                         {
+                                            busted++;
                                             player.isActive = false;
                                             player.isBust = true;
                                             busted++;
@@ -234,6 +237,7 @@ namespace JavidRaceto21DO
                                         //If a player busts they lose automatically and turn ends
                                         if (player.score > 21)
                                         {
+                                            busted++;
                                             player.isActive = false;
                                             Console.WriteLine();
                                             Console.WriteLine("" + player.name + " has busted, sorry!");
@@ -292,6 +296,8 @@ namespace JavidRaceto21DO
                     }
 
                 }
+               
+
 
 
             }
@@ -355,10 +361,12 @@ namespace JavidRaceto21DO
 
                 foreach (Player player in players)
                 {
+
+                    
                     // Calculate score mechanic
                     //Declare Winner
 
-                    
+
                     turn = 0;
                     Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
                     Console.WriteLine();
