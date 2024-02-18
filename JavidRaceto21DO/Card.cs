@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JavidRaceto21DO
 {
-     class Card
+     public class Card
     {
       public string ID;
       public string name;
