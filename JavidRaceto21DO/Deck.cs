@@ -4,17 +4,19 @@ using System.Linq; // currently only needed if we use alternate shuffle method
 
 namespace JavidRaceto21DO
 {
-   
+
     public class Deck
     {
-       List<Card> cardsForGame = new List<Card>();
+        List<Card> cardsForGame = new List<Card>();
 
-     
+
         public Deck()
         {
             //Lifted from template, creates an array of card suits, creating an item for every 13 in each four suit
 
-            Console.WriteLine("...............Please wait, building new deck Deck..........");
+            Console.WriteLine("...............Please wait, building new deck ..........");
+            Console.WriteLine();
+
             string[] suits = { "S", "H", "C", "D" };
 
             for (int cardVal = 1; cardVal <= 13; cardVal++)
@@ -68,7 +70,7 @@ namespace JavidRaceto21DO
             }
         }
 
-        
+
         public void Shuffle()
         {
             Console.WriteLine();
@@ -77,7 +79,7 @@ namespace JavidRaceto21DO
 
             Random rng = new Random();
 
-           // Randomizing the cards in deck
+            // Randomizing the cards in deck
             for (int i = 0; i < cardsForGame.Count; i++)
             {
                 Card tmp = cardsForGame[i];
@@ -89,13 +91,28 @@ namespace JavidRaceto21DO
 
 
         //After Index has been jumbled takes card and removes from index and returns value to be plugged into player
-        public Card  DealTopCard()
+        public Card DealTopCard()
         {
             Card card = cardsForGame[cardsForGame.Count - 1];
             cardsForGame.RemoveAt(cardsForGame.Count - 1);
             // Console.WriteLine("I'm giving you " + card);
             return card;
         }
+
+        
+        public Card DealThirdCard()
+        {
+
+            Card card = cardsForGame[cardsForGame.Count - 3];
+            cardsForGame.RemoveAt(cardsForGame.Count - 3);
+
+            return card;
+
+
+        }
+
+
+
     }
 }
 
