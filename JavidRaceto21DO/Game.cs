@@ -113,7 +113,7 @@ namespace JavidRaceto21DO
                 foreach (Player player in players)
                 {
                     //To stop it asking players who said no to playing another round
-                    if (player.isActive == true &&)
+                    if (player.isActive == true)
                     {
                         //Adding a smaller list of players for individual rounds
                         Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
