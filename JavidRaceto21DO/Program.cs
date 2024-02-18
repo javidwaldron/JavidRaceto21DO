@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace JavidRaceto21DO
 {
@@ -13,18 +14,13 @@ namespace JavidRaceto21DO
             
             // New Game Started
             Game game = new Game();
-           
+            
             //Does SetUp and Core Game Mechanics
             game.Setup();
             game.CoreGame();  
             
             // If players want a new game (Come back toi this may only repeat once)
-            if(game.gameEnd == true)
-            {
-                
-                game.Setup();
-                game.CoreGame();
-            }
+        
 
         }
     }

@@ -15,6 +15,7 @@ namespace JavidRaceto21DO
         public bool gameEnd = false;
         public bool roundEnd = false;
         Deck deck = new Deck();
+        public int gamesplayed = 0;
 
         List<Player> players = new List<Player>();
 
@@ -26,7 +27,7 @@ namespace JavidRaceto21DO
             Console.WriteLine();
             int numberOfplayers = int.Parse(Console.ReadLine());
             Console.WriteLine();
-            Console.WriteLine("+++++++++++++++++++++++++++++++++");
+            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
             Console.WriteLine();
             Console.WriteLine("There are " + numberOfplayers + " playing");
             Console.WriteLine();
@@ -39,7 +40,7 @@ namespace JavidRaceto21DO
             }
 
             // Delete this comment when done for testing
-            Console.WriteLine("++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
             Console.WriteLine();
 
             //Getting player names
@@ -53,7 +54,7 @@ namespace JavidRaceto21DO
             }
 
             Console.WriteLine();
-            Console.WriteLine("+++++++++++++++++++++++++++++");
+            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 
 
             //Setting waging, while all players will begin with 100 not revealed or displayed for not betting people
@@ -259,7 +260,7 @@ namespace JavidRaceto21DO
                             {
                                 Console.WriteLine("Please Enter either (Y) for yes or (N) for no");
                                 response = Console.ReadLine();
-
+                                
                             }
                         }
                         // If every outcome has happened, adds an int. if it equals the total items in current player list, round ends
@@ -285,6 +286,7 @@ namespace JavidRaceto21DO
 
                     
                     turn = 0;
+                    Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
                     Console.WriteLine();
                     Console.Write("" + player.name + " would you like to play another round (Y) for yes and (N) for no. : ");
                     string playagain = Console.ReadLine();
@@ -298,6 +300,7 @@ namespace JavidRaceto21DO
                         currentPlayers.Add(player);
                         player.isActive = true;
                         player.askedAboutThreeCard = false;
+                        player.askedInRound = false;
                         player.isBust = false;
                         player.hasWon = false;
 
@@ -319,7 +322,7 @@ namespace JavidRaceto21DO
                     {
                         Console.Write("Please Enter (Y) for yes or (N) for no. : ");
                     }
-              //Creates a new deck after asking whos still playing
+              
                 
                 
                 
@@ -335,10 +338,12 @@ namespace JavidRaceto21DO
 
                     if (playAgainResponse.ToUpper().StartsWith("Y"))
                     {
+                        gamesplayed++;
+                        string deckName = gamesplayed.ToString();
                         Console.WriteLine();
                         players.Clear();
-                        gameEnd = true;
-                        Deck deck1 = new Deck();
+                        roundEnd = false;
+                        
                         Setup();
                         CoreGame();
 
@@ -355,6 +360,7 @@ namespace JavidRaceto21DO
                     }
                 }
 
+                //Creates a new deck after asking whos still playing, checking if  theres a new game started
                 Deck deck = new Deck();
                 CoreGame();
 
