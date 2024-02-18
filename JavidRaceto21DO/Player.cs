@@ -23,5 +23,6 @@ namespace JavidRaceto21DO
         public bool askedAboutThreeCard = false;
         public bool dealOne = false;
         public bool dealThree = false;
+        public bool askedInRound = false;
     }
 }

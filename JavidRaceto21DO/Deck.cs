@@ -74,7 +74,7 @@ namespace JavidRaceto21DO
         public void Shuffle()
         {
             Console.WriteLine();
-            Console.WriteLine("......Shuffling Cards.....");
+            Console.WriteLine("................Shuffling Cards................");
             Console.WriteLine();
 
             Random rng = new Random();
@@ -99,17 +99,6 @@ namespace JavidRaceto21DO
             return card;
         }
 
-        
-        public Card DealThirdCard()
-        {
-
-            Card card = cardsForGame[cardsForGame.Count - 3];
-            cardsForGame.RemoveAt(cardsForGame.Count - 3);
-
-            return card;
-
-
-        }
 
 
 
