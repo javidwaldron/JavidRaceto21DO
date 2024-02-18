@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace JavidRaceto21DO
 {
-    internal class CardTable
+   class CardTable
     {
+
+
+        public void WinningConditions()
+        {
+            
+               
+            
+
+
+        }
     }
 }
