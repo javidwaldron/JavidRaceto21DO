@@ -167,7 +167,7 @@ namespace JavidRaceto21DO
                                                 player.isActive = false;
                                                 playerScores.Add(player.score);
                                                 Console.WriteLine();
-                                                Console.WriteLine("" + player.name + "'is staying with a final score of " + player.score + "/21.");
+                                                Console.WriteLine("" + player.name + " is staying with a final score of " + player.score + "/21.");
                                                 turn++;
 
                                             }
@@ -181,6 +181,7 @@ namespace JavidRaceto21DO
                                         if (player.score == 21)
                                         {
                                             player.hasWon = true;
+                                            player.isActive = false;
                                             roundEnd = true;
                                             turn++;
                                             break;
@@ -223,7 +224,7 @@ namespace JavidRaceto21DO
 
                                         if (player.score == 21)
                                         {
-                                            
+                                            player.isActive = false;
                                             player.hasWon = true;
                                             roundEnd = true;
                                             turn++;
@@ -246,7 +247,7 @@ namespace JavidRaceto21DO
                                         {
                                             player.isActive = false;
                                             Console.WriteLine();
-                                            Console.WriteLine("" + player.name + "'is staying with a final score of " + player.score + "/21.");
+                                            Console.WriteLine("" + player.name + " is staying with a final score of " + player.score + "/21.");
                                             turn++;
 
                                         }
@@ -296,28 +297,54 @@ namespace JavidRaceto21DO
             }
             if (roundEnd == true)
             {
-                int highScore = 0;
-                foreach (var player in players)
+
+                
+                var result_set = playerScores.OrderBy(playerScores => playerScores);
+                int highscore = playerScores.IndexOf(0);
+
+                foreach(Player player in currentPlayers)
                 {
+
                     
                     //If someone hit 21
                     if (player.hasWon == true)
                     {
-                        Console.WriteLine("Congratulations," + player.name + "has won this round!");
+                        Console.WriteLine();
+                        Console.WriteLine("Congratulations, " + player.name + " has won this round!");
                     }
                     // If all but one has busted
-                    else if (!player.isBust && !player.hasWon && busted == currentPlayers.Count - 1 ) 
+                    else if (!player.isBust && !player.hasWon && busted == currentPlayers.Count - 1)
                     {
-                        Console.WriteLine("Congratulations, " + player.name + " , you are the last man standing!");
+                        Console.WriteLine();
+                        Console.WriteLine("Congratulations, " + player.name + " , you are the last man standing! You win the round");
                     }
+                    //If Everyone Busts
                     else if (player.isBust && busted == currentPlayers.Count)
                     {
+                        Console.WriteLine();
                         Console.WriteLine("Everybody Busted!");
                     }
                     // if busted don't bother checking!
+
+                    else if (player.isStaying == true)
+                    {
+                        int a = player.score;
+                       
+                        if (a == highscore)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("" + player.name + " scored the highest, therefore is the winner!");
+                        }
+                        else
+                        {
+                            Console.Write("");
+
+                        }
+
+                    }
+
                 }
-                if (highScore > 0) // someone scored, anyway!
-                    Console.WriteLine("We will figure this out");
+                    
 
             }
             
@@ -355,6 +382,7 @@ namespace JavidRaceto21DO
                         player.score = 0;
                         roundEnd = false;
                         player.cardsInHand.Clear();
+                        playerScores.Clear();
 
 
                     }
@@ -370,10 +398,8 @@ namespace JavidRaceto21DO
                     {
                         Console.Write("Please Enter (Y) for yes or (N) for no. : ");
                     }
-              
-                
-                
-                
+
+
                 }
 
 
@@ -407,12 +433,13 @@ namespace JavidRaceto21DO
                     Console.WriteLine("Please Enter a (Y) for yes or (N) for no : ");
                 }
 
-
-                //Creates a new deck after asking whos still playing, checking if  theres a new game started
-                Deck deck = new Deck();
-                CoreGame();
             }
-            
+
+            //Creates a new deck after asking whos still playing, checking if  theres a new game started
+            deck = new Deck();
+            CoreGame();
+
+
             int ScoreHand(Player player)
             {
                 int score = 0;
