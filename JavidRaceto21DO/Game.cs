@@ -17,7 +17,7 @@ namespace JavidRaceto21DO
 
         List<Player> players = new List<Player>();
 
-        //Begin from here, move welcome to 21 to beginning of program later
+        
         public void Setup()
         {
             gameEnd = false;
@@ -305,8 +305,7 @@ namespace JavidRaceto21DO
                 
                 }
                 
-                Deck deck = new Deck();
-                CoreGame();
+                
 
                 // If there are no current players, ask if they want to start a new game
                 if (currentPlayers.Count == 0)
@@ -319,6 +318,10 @@ namespace JavidRaceto21DO
                         Console.WriteLine("Start game over again code here");
                         players.Clear();
                         gameEnd = true;
+                        Deck deck1 = new Deck();
+                        Setup();
+                        CoreGame();
+
 
                     }
                     else if (playAgainResponse.ToUpper().StartsWith("N"))
@@ -331,6 +334,9 @@ namespace JavidRaceto21DO
                         Console.WriteLine("Please Enter a (Y) for yes or (N) for no : ");
                     }
                 }
+
+                Deck deck = new Deck();
+                CoreGame();
 
             }
             int ScoreHand(Player player)
