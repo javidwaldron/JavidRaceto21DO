@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Net.Security;
 using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -117,6 +118,7 @@ namespace JavidRaceto21DO
             // Using turn ints to tell when everyone has gone
             int turn = 0;
             int busted = 0;
+            int notactive = 0;
             int twentyOneObtained = 0;
 
             //Creating a list within a list for round by round play
@@ -132,7 +134,7 @@ namespace JavidRaceto21DO
                 foreach (Player player in players)
                 {
                     //To stop it asking players who said no to playing another round
-                    if (player.isActive == true)
+                    if (player.isActive == true && player.isEliminated == false)
                     {
                         //Adding a smaller list of players for individual rounds
                         Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -193,7 +195,7 @@ namespace JavidRaceto21DO
                                         while (player.score < 21 && player.isActive == true)
                                         {
 
-                                            Console.Write("" + player.name + ", would you like a card? Enter (Y) for yes or (N) for no. : ");
+                                            Console.Write("" + player.name + ", are you ready for a card? Enter (Y) for yes or (N) for no. : ");
                                             string anotherResponse = Console.ReadLine();
 
                                             //If player takes card is under 21 score and active all the code happens and will repeat until....
@@ -316,8 +318,10 @@ namespace JavidRaceto21DO
                             {
 
                                 Console.WriteLine("" + player.name + " , is staying out this round.");
-                                currentPlayers.Remove(player);
+                                turn++;
                                 player.askedInRound = true;
+                                player.isActive = false;
+                                notactive++;
 
                             }
                             //Reprimand for improper answer
@@ -329,8 +333,9 @@ namespace JavidRaceto21DO
                             }
                         }
                         // If every outcome has happened, adds an int. if it equals the total items in current player list, round ends
-                        if (turn == currentPlayers.Count)
+                        if (turn == currentPlayers.Count || currentPlayers.Count == 0)
                         {
+                            
                             roundEnd = true;
                             
                         }
@@ -344,6 +349,44 @@ namespace JavidRaceto21DO
             //Round is up due to everyone having gone
             while (roundEnd == true)
             {
+
+
+                if (currentPlayers.Count == 0 || notactive == currentPlayers.Count)
+                {
+                    Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    Console.WriteLine();
+                    Console.Write("There is no one who wants to continue this round. Start a new game? Enter (Y) for yes or (N) for no : ");
+                    string playAgainResponse = Console.ReadLine();
+                    Console.WriteLine();
+                    Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+
+
+                    //Not sure original logic here, think i didnt want deck to get corrupt with same name? Test later
+                    if (playAgainResponse.ToUpper().StartsWith("Y"))
+                    {
+                        gamesplayed++;
+                        string deckName = gamesplayed.ToString();
+                        Console.WriteLine();
+                        players.Clear();
+                        roundEnd = false;
+
+                        Setup();
+                        CoreGame();
+
+
+                    }
+                    //Trying code to exit program I found online
+                    else if (playAgainResponse.ToUpper().StartsWith("N"))
+                    {
+                        System.Environment.Exit(1);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please Enter a (Y) for yes or (N) for no : ");
+                    }
+                }
 
                 //Followed tutorials on sorting list, should declare winner first and descending by score
                 players.Sort((left,right) =>left.score.CompareTo(right.score));
@@ -370,7 +413,7 @@ namespace JavidRaceto21DO
                 {
                     
 
-                        if (player.hasWon)
+                        if (player.hasWon && player.isEliminated == false)
                         {
                             Console.WriteLine("Congratulations, " + player.name + " has won this round!");
                             Console.WriteLine();
@@ -382,7 +425,7 @@ namespace JavidRaceto21DO
                         }
 
                     }
-                        else if (!player.hasWon)
+                        else if (!player.hasWon && player.isEliminated == false && player.isActive == false)
                         {
                             if (!player.isBust && twentyOneObtained == 0)
                             {
@@ -397,22 +440,29 @@ namespace JavidRaceto21DO
                                 }
 
                                 }
+                            else
+                            {
+                                Console.Write("");
                             }
                             
-                            if(player.isBetting== true && player.score!= playerScore[0] && !player.isBust)
+                            }
+                            
+                            if(player.isBetting== true && player.score!= playerScore[0] && !player.isBust && player.isEliminated == false)
                             {
                                 player.bettingMoney = player.bettingMoney - player.betAmount;
                                 Console.WriteLine();
                                 Console.WriteLine("" + player.name + " has lost $" + player.betAmount + " in cash! Making their new cash total $" + player.bettingMoney + "!!!");
                             }
-                           if(player.isBetting == true && player.bettingMoney <= 0)
+                           if(player.isBetting == true && player.bettingMoney <= 0 && player.isEliminated == false)
                         {
                             Console.WriteLine();
                             Console.WriteLine("Sorry, " + player.name + ", you're out of cash, so you are out of the game!!!");
                             Console.WriteLine();
                             Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+                            currentPlayers.Remove(player);
+                            player.isEliminated = true;
 
-                        }
+    }
                         Console.Write("");
 
                         }
@@ -422,7 +472,7 @@ namespace JavidRaceto21DO
                     turn = 0;
 
                     // Checks to see if playing for fun, if betting and out of money they are out!!!
-                    if (!player.isBetting || player.isBetting == true && player.bettingMoney > 0)
+                    if (!player.isBetting || player.isBetting == true && player.bettingMoney > 0 && player.isEliminated == false)
                     {
                         Console.WriteLine();
                         Console.Write("" + player.name + ", would you like to play another round?  (Y) for yes and (N) for no. : ");
@@ -464,7 +514,7 @@ namespace JavidRaceto21DO
 
 
                     }
-                    else
+                    else if(player.isBetting == true && player.bettingMoney == 0)
                     {
                         currentPlayers.Remove(player);
                     }
@@ -473,39 +523,6 @@ namespace JavidRaceto21DO
 
 
 
-                // If there are no current players, ask if they want to start a new game
-                if (currentPlayers.Count == 0)
-                {
-                    Console.WriteLine("There is no one who wants to continue this round. Start a new game? Enter (Y) for yes or (N) for no : ");
-                    string playAgainResponse = Console.ReadLine();
-
-                    //Not sure original logic here, think i didnt want deck to get corrupt with same name? Test later
-                    if (playAgainResponse.ToUpper().StartsWith("Y"))
-                    {
-                        gamesplayed++;
-                        string deckName = gamesplayed.ToString();
-                        Console.WriteLine();
-                        players.Clear();
-                        roundEnd = false;
-
-                        Setup();
-                        CoreGame();
-
-
-                    }
-                    //Trying code to exit program I found online
-                    else if (playAgainResponse.ToUpper().StartsWith("N"))
-                    {
-                        System.Environment.Exit(1);
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("Please Enter a (Y) for yes or (N) for no : ");
-                    }
-                }
-
-                //Creates a new deck after asking whos still playing, checking if  theres a new game started
                 Deck deck = new Deck();
                 CoreGame();
 
