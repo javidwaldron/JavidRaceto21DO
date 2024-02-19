@@ -342,7 +342,10 @@ namespace JavidRaceto21DO
             //Round is up due to everyone having gone
             while (roundEnd == true)
             {
-                
+
+                //Followed tutorials on sorting list, should declare winner first and descending by score
+                players.Sort((left,right) =>left.score.CompareTo(right.score));
+                players.Reverse();
                
                 Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
                 Console.WriteLine();
@@ -372,7 +375,7 @@ namespace JavidRaceto21DO
                             if(player.isBetting)
                         {
                             player.bettingMoney = player.bettingMoney + player.betAmount;
-                            Console.WriteLine("" + player.name + " has won $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
+                            Console.WriteLine("" + player.name + " has won $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "!!!");
 
                         }
 
@@ -388,65 +391,81 @@ namespace JavidRaceto21DO
                                 if(player.isBetting == true)
                                 {
                                     player.bettingMoney = player.bettingMoney + player.betAmount;
-                                    Console.WriteLine("" + player.name + " has won $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
+                                    Console.WriteLine("" + player.name + " has won $" + player.betAmount + " in cash! Making their new cash total $" + player.bettingMoney + "!!!");
                                 }
 
                                 }
                             }
                             
-                            if(player.isBetting== true && player.score!= playerScore[0] &&!player.isBust)
+                            if(player.isBetting== true && player.score!= playerScore[0] && !player.isBust)
                             {
                                 player.bettingMoney = player.bettingMoney - player.betAmount;
-                                Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
+                                Console.WriteLine();
+                                Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "!!!");
                             }
-                           
+                           if(player.isBetting == true && player.bettingMoney <= 0)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("Sorry, " + player.name + ", you're out of cash, so you are out of the game");
+                            Console.WriteLine();
+                            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                        }
                         Console.Write("");
 
                         }
-                   
+                
 
 
                     turn = 0;
-                    
-                    Console.WriteLine();
-                    Console.Write("" + player.name + " would you like to play another round (Y) for yes and (N) for no. : ");
-                    string playagain = Console.ReadLine();
-                    Console.WriteLine();
-                    Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-
-                    //Do you want to play again, if yes adds back to the current players
-                    if (playagain.ToUpper().StartsWith("Y"))
+                    // Checks to see if playing for fun, if betting and out of money they are out!!!
+                    if (!player.isBetting || player.isBetting == true && player.bettingMoney > 0)
                     {
+                        Console.WriteLine();
+                        Console.Write("" + player.name + " would you like to play another round (Y) for yes and (N) for no. : ");
+                        string playagain = Console.ReadLine();
+                        Console.WriteLine();
+                        Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-                        currentPlayers.Add(player);
-                        player.isActive = true;
-                        player.askedAboutThreeCard = false;
-                        player.askedInRound = false;
-                        player.isBust = false;
-                        player.hasWon = false;
 
-                        player.score = 0;
-                        roundEnd = false;
-                        player.cardsInHand.Clear();
+                        //Do you want to play again, if yes adds back to the current players
+                        if (playagain.ToUpper().StartsWith("Y"))
+                        {
+
+                            currentPlayers.Add(player);
+                            player.isActive = true;
+                            player.askedAboutThreeCard = false;
+                            player.askedInRound = false;
+                            player.isBust = false;
+                            player.hasWon = false;
+
+                            player.score = 0;
+                            roundEnd = false;
+                            player.cardsInHand.Clear();
+
+
+
+                        }
+                        //If you dont want to play again removes from current players/
+                        else if (playagain.ToUpper().StartsWith("N"))
+                        {
+
+                            currentPlayers.Remove(player);
+                            player.isActive = false;
+                        }
+                        //Reprimanding bad input
+                        else
+                        {
+                            Console.Write("Please Enter (Y) for yes or (N) for no. : ");
+                        }
 
 
                     }
-                    //If you dont want to play again removes from current players/
-                    else if (playagain.ToUpper().StartsWith("N"))
-                    {
-
-                        currentPlayers.Remove(player);
-                        player.isActive = false;
-                    }
-                    //Reprimanding bad input
                     else
                     {
-                        Console.Write("Please Enter (Y) for yes or (N) for no. : ");
+                        currentPlayers.Remove(player);
                     }
-
-
-
 
                 }
 
