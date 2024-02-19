@@ -13,8 +13,10 @@ namespace JavidRaceto21DO
         public Deck()
         {
             //Lifted from template, creates an array of card suits, creating an item for every 13 in each four suit
-
-            Console.WriteLine("...............Please wait, building new deck ..........");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("...........Please wait, building new deck ..........");
+            Console.WriteLine();
             Console.WriteLine();
 
             string[] suits = { "S", "H", "C", "D" };

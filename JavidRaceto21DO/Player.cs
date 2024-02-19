@@ -13,6 +13,7 @@ namespace JavidRaceto21DO
         public string name;
         public int score = 0;
         public int bettingMoney;
+        public int betAmount;
 
         public bool isActive = true;
         public bool isBetting = false;

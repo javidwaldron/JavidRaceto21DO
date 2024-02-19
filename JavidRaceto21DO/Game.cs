@@ -149,28 +149,31 @@ namespace JavidRaceto21DO
                                 currentPlayers.Add(player);
                                 player.askedInRound = true;
                                 
+                                //if betting is true, sets up question of wager, making sure wager does not exceed current wallet
                                 if(player.isBetting == true)
                                 {
                                     
                                     int betAmount;
 
-                                    Console.WriteLine("How much would you like to bet this round?");
-                                    Console.WriteLine("" + player.name + " has $" + player.bettingMoney + " in cash currently!");
+                                    Console.Write("How much would you like to bet this round?");
+                                    Console.Write(" " + player.name + " has $" + player.bettingMoney + " in cash currently!: $");
 
                                     string bettingAnswer = Console.ReadLine();
 
                                     while (int.TryParse(bettingAnswer, out betAmount) == false || betAmount > player.bettingMoney)
                                     {
                                         Console.WriteLine("Invalid amount for bet.");
-                                        Console.Write("How much would you like to bet this round?");
+                                        Console.Write("How much would you like to bet this round? :$");
                                         bettingAnswer = Console.ReadLine();
-                                        Console.WriteLine();
+                                        Console.Write("");
                                     }
 
 
+                                    // Final Declare of money waged this round
+                                    Console.WriteLine() ;
                                     Console.WriteLine("" + player.name + ", is betting $" + betAmount + " this round!");
 
-
+                                    player.betAmount = betAmount;
                                 }
 
 
@@ -241,7 +244,8 @@ namespace JavidRaceto21DO
                                             Console.WriteLine();
                                             Console.WriteLine("" + player.name + " has busted, sorry!");
                                             turn++;
-
+                                            player.bettingMoney = player.bettingMoney - player.betAmount;
+                                            Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
                                         }
                                     }
                                     // Sets game for player to be based on three cards
@@ -280,6 +284,8 @@ namespace JavidRaceto21DO
                                             player.isBust = true;
                                             turn++;
                                             busted++;
+                                            player.bettingMoney = player.bettingMoney - player.betAmount;
+                                            Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
 
                                         }
                                         //Automatically stays if neither 21 or busting met
@@ -356,39 +362,57 @@ namespace JavidRaceto21DO
                
                 // Checks if someone has won and writes there name, if they havent and no one has one with twentyoneobtained varaible, writes name of person score equal to highest stored scores :)
                 foreach (Player player in players)
-                {    
-                    if (player.hasWon)
-                    {
-                        Console.WriteLine("Congratulations, " + player.name + " has won this round!");
-                        Console.WriteLine();
-                    }
-                    else if (!player.hasWon) 
-                    {
-                        if(!player.isBust && twentyOneObtained == 0)
-                        {
-                            if(player.score == playerScore[0])
-                            {
-                                Console.WriteLine("" + player.name + ", scored the highest this round, therefore is the winner!");
-                                Console.WriteLine();
-                            }
-                        }
-                        else
-                        {
-                            Console.Write("");
-                        }
+                {
                     
-                    }
-                    
-                
 
+                        if (player.hasWon)
+                        {
+                            Console.WriteLine("Congratulations, " + player.name + " has won this round!");
+                            Console.WriteLine();
+                            if(player.isBetting)
+                        {
+                            player.bettingMoney = player.bettingMoney + player.betAmount;
+                            Console.WriteLine("" + player.name + " has won $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
+
+                        }
+
+                    }
+                        else if (!player.hasWon)
+                        {
+                            if (!player.isBust && twentyOneObtained == 0)
+                            {
+                                if (player.score == playerScore[0])
+                                {
+                                    Console.WriteLine("" + player.name + ", scored the highest this round, therefore is the winner!");
+                                    Console.WriteLine();
+                                if(player.isBetting == true)
+                                {
+                                    player.bettingMoney = player.bettingMoney + player.betAmount;
+                                    Console.WriteLine("" + player.name + " has won $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
+                                }
+
+                                }
+                            }
+                            
+                            if(player.isBetting== true && player.score!= playerScore[0] &&!player.isBust)
+                            {
+                                player.bettingMoney = player.bettingMoney - player.betAmount;
+                                Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
+                            }
+                           
+                        Console.Write("");
+
+                        }
+                   
 
 
                     turn = 0;
-                    Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    
                     Console.WriteLine();
                     Console.Write("" + player.name + " would you like to play another round (Y) for yes and (N) for no. : ");
                     string playagain = Console.ReadLine();
                     Console.WriteLine();
+                    Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 
 
                     //Do you want to play again, if yes adds back to the current players
