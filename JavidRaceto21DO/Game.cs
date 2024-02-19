@@ -244,6 +244,7 @@ namespace JavidRaceto21DO
                                             Console.WriteLine();
                                             Console.WriteLine("" + player.name + " has busted, sorry!");
                                             turn++;
+                                            player.score = 0;
                                             player.bettingMoney = player.bettingMoney - player.betAmount;
                                             Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
                                         }
@@ -282,6 +283,7 @@ namespace JavidRaceto21DO
                                             Console.WriteLine();
                                             Console.WriteLine("" + player.name + " has busted, sorry!");
                                             player.isBust = true;
+                                            player.score = 0;
                                             turn++;
                                             busted++;
                                             player.bettingMoney = player.bettingMoney - player.betAmount;
@@ -375,7 +377,7 @@ namespace JavidRaceto21DO
                             if(player.isBetting)
                         {
                             player.bettingMoney = player.bettingMoney + player.betAmount;
-                            Console.WriteLine("" + player.name + " has won $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "!!!");
+                            Console.WriteLine("" + player.name + " has won $" + player.betAmount + " in cash! Making their new cash total $" + player.bettingMoney + "!!!");
 
                         }
 
@@ -401,12 +403,12 @@ namespace JavidRaceto21DO
                             {
                                 player.bettingMoney = player.bettingMoney - player.betAmount;
                                 Console.WriteLine();
-                                Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "!!!");
+                                Console.WriteLine("" + player.name + " has lost $" + player.betAmount + " in cash! Making their new cash total $" + player.bettingMoney + "!!!");
                             }
                            if(player.isBetting == true && player.bettingMoney <= 0)
                         {
                             Console.WriteLine();
-                            Console.WriteLine("Sorry, " + player.name + ", you're out of cash, so you are out of the game");
+                            Console.WriteLine("Sorry, " + player.name + ", you're out of cash, so you are out of the game!!!");
                             Console.WriteLine();
                             Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 
@@ -423,7 +425,7 @@ namespace JavidRaceto21DO
                     if (!player.isBetting || player.isBetting == true && player.bettingMoney > 0)
                     {
                         Console.WriteLine();
-                        Console.Write("" + player.name + " would you like to play another round (Y) for yes and (N) for no. : ");
+                        Console.Write("" + player.name + ", would you like to play another round?  (Y) for yes and (N) for no. : ");
                         string playagain = Console.ReadLine();
                         Console.WriteLine();
                         Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
