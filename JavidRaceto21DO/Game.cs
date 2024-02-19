@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,8 +102,12 @@ namespace JavidRaceto21DO
             // Using turn ints to tell when everyone has gone
             int turn = 0;
             int busted = 0;
+            int twentyOneObtained = 0;
+
             //Creating a list within a list for round by round play
             List<Player> currentPlayers = new List<Player>();
+            
+            //Creating list to store player scores
             List<int> playerScore = new List<int>();
 
             //While the game isnt over
@@ -162,6 +167,7 @@ namespace JavidRaceto21DO
                                                 
 
                                             }
+                                            //Player syas no, ends turn and adds score to player score index
                                             else if (anotherResponse.ToUpper().StartsWith("N"))
                                             {
                                                 player.isStaying = true;
@@ -172,6 +178,7 @@ namespace JavidRaceto21DO
                                                 turn++;
 
                                             }
+                                            //Reprimand for bad input
                                             else
                                             {
                                                 Console.WriteLine("Please Enter either (Y) for yes or (N) for no : ");
@@ -181,8 +188,8 @@ namespace JavidRaceto21DO
                                         // When player score is equal to 21 they win automatically and the game ends ***Revist has won***
                                         if (player.score == 21)
                                         {
-                                            player.hasWon = true;
-                                            roundEnd = true;
+                                            twentyOneObtained++;
+                                            player.hasWon = true;                                           
                                             turn++;
 
                                         }
@@ -219,8 +226,8 @@ namespace JavidRaceto21DO
 
                                         if (player.score == 21)
                                         {
-                                            player.hasWon = true;
-                                            roundEnd = true;
+                                            twentyOneObtained++;
+                                            player.hasWon = true;                                          
                                             turn++;
                                             
 
@@ -236,6 +243,7 @@ namespace JavidRaceto21DO
                                             busted++;
 
                                         }
+                                        //Automatically stays if neither 21 or busting met
                                         else
                                         {
                                             player.isActive = false;
@@ -265,6 +273,7 @@ namespace JavidRaceto21DO
                                 player.askedInRound = true;
 
                             }
+                            //Reprimand for improper answer
                             else
                             {
                                 Console.WriteLine("Please Enter either (Y) for yes or (N) for no");
@@ -276,7 +285,7 @@ namespace JavidRaceto21DO
                         if (turn == currentPlayers.Count)
                         {
                             roundEnd = true;
-
+                            
                         }
 
                     }
@@ -288,36 +297,50 @@ namespace JavidRaceto21DO
             //Round is up due to everyone having gone
             while (roundEnd == true)
             {
+                
+               
                 Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
                 Console.WriteLine();
+                
+                //Takes the final scores and sorts then ascendingly, then reverses it
                 playerScore.Sort();
                 playerScore.Reverse();
                 
+                //Just for testing, delete later
                 for (int i = 0; i < playerScore.Count; i++)
                 {
                     int number = playerScore[i];
                     Console.WriteLine(number);
                 }
+               // If busted is equal to total number of those currently playing, busted message plays
+                if(busted == currentPlayers.Count)
+                {
+                    Console.WriteLine("Oh no, everyone busted!");
+                    Console.WriteLine();
+                }
                
 
                 foreach (Player player in players)
                 {    
-                    if (player.hasWon == true)
+                    if (player.hasWon)
                     {
                         Console.WriteLine("Congratulations, " + player.name + " has won this round!");
+                        Console.WriteLine();
                     }
-                    // If all but one has busted
-                    else if (!player.isBust && !player.hasWon && busted == currentPlayers.Count - 1)
+                    else if (!player.hasWon) 
                     {
-                        Console.WriteLine("Congratulations, " + player.name + " , you are the last man standing!");
-                    }
-                    else if (player.isStaying && !player.isBust && player.score == playerScore.IndexOf(0))
-                    {
-                        Console.WriteLine("" + player.name+ "scored the highest, therefore, they win!");
-                    }
-                    else
-                    {
-                        Console.Write("");
+                        if(!player.isBust && twentyOneObtained == 0)
+                        {
+                            if(player.score == playerScore[0])
+                            {
+                                Console.WriteLine("" + player.name + " scored the highest this round, therefore is the winner!");
+                            }
+                        }
+                        else
+                        {
+                            Console.Write("");
+                        }
+                    
                     }
                     
                 
@@ -375,6 +398,7 @@ namespace JavidRaceto21DO
                     Console.WriteLine("There is no one who wants to continue this round. Start a new game? Enter (Y) for yes or (N) for no : ");
                     string playAgainResponse = Console.ReadLine();
 
+                    //Not sure original logic here, think i didnt want deck to get corrupt with same name? Test later
                     if (playAgainResponse.ToUpper().StartsWith("Y"))
                     {
                         gamesplayed++;
@@ -388,6 +412,7 @@ namespace JavidRaceto21DO
 
 
                     }
+                    //Trying code to exit program I found online
                     else if (playAgainResponse.ToUpper().StartsWith("N"))
                     {
                         System.Environment.Exit(1);
@@ -404,6 +429,7 @@ namespace JavidRaceto21DO
                 CoreGame();
 
             }
+            //Lifted from jays original code
             int ScoreHand(Player player)
             {
                 int score = 0;
@@ -428,6 +454,7 @@ namespace JavidRaceto21DO
                 }
                 return score;
             }
+            //Lifted from jays original code
             void ShowHand(Player player)
             {
                 if (player.cardsInHand.Count > 0)
