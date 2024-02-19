@@ -94,6 +94,7 @@ namespace JavidRaceto21DO
         // Essentially where offer a card is, asked if they want to be dealt a card or three in a turn
         public void CoreGame()
         {
+            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
             //Shuffle's cards
             deck.Shuffle();
 
@@ -167,6 +168,7 @@ namespace JavidRaceto21DO
                                                 player.isActive = false;
                                                 Console.WriteLine();
                                                 Console.WriteLine("" + player.name + "'is staying with a final score of " + player.score + "/21.");
+                                                playerScore.Add(player.score);
                                                 turn++;
 
                                             }
@@ -211,7 +213,7 @@ namespace JavidRaceto21DO
                                         ShowHand(player);
                                         Console.WriteLine();
                                         Console.WriteLine("" + player.name + "'s, score is now " + player.score + "/21.");
-                                        playerScore.Add(player.score);
+                                        
 
                                         player.askedAboutThreeCard = true;
 
@@ -240,7 +242,7 @@ namespace JavidRaceto21DO
                                             Console.WriteLine();
                                             Console.WriteLine("" + player.name + "'is staying with a final score of " + player.score + "/21.");
                                             turn++;
-                                            
+                                            playerScore.Add(player.score);
                                         }
 
                                     }
@@ -286,9 +288,17 @@ namespace JavidRaceto21DO
             //Round is up due to everyone having gone
             while (roundEnd == true)
             {
-                var result = playerScore.OrderByDescending(playerScore => playerScore);
-                int highscore = playerScore.IndexOf(0);
-                Console.WriteLine(highscore);
+                Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine();
+                playerScore.Sort();
+                playerScore.Reverse();
+                
+                for (int i = 0; i < playerScore.Count; i++)
+                {
+                    int number = playerScore[i];
+                    Console.WriteLine(number);
+                }
+               
 
                 foreach (Player player in players)
                 {    
