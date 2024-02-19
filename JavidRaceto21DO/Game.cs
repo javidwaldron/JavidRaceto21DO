@@ -27,7 +27,7 @@ namespace JavidRaceto21DO
 
             //Gets number of players using jay's code/ rebuking if invalid format entered
             gameEnd = false;
-            Console.WriteLine("How many players? (Please enter a number between 2 & 8): ");
+            Console.WriteLine("How many players? (Please enter a valid whole number between 2 & 8): ");
             Console.WriteLine();
             string howManyPlayers = Console.ReadLine();
             int numberOfplayers;
@@ -83,7 +83,8 @@ namespace JavidRaceto21DO
 
                     if (response.ToUpper().StartsWith("Y"))
                     {
-                        Console.WriteLine("" + player.name + ", is beginning with $100 betting money!");
+                        player.bettingMoney = 100;
+                        Console.WriteLine("" + player.name + ", is beginning with $" + player.bettingMoney + " of betting money!");
                         Console.WriteLine();
                         player.isBetting = true;
                         player.askedAboutBetting = true;
@@ -147,6 +148,30 @@ namespace JavidRaceto21DO
                                 //Adding a smaller list of players for individual rounds
                                 currentPlayers.Add(player);
                                 player.askedInRound = true;
+                                
+                                if(player.isBetting == true)
+                                {
+                                    
+                                    int betAmount;
+
+                                    Console.WriteLine("How much would you like to bet this round?");
+                                    Console.WriteLine("" + player.name + " has $" + player.bettingMoney + " in cash currently!");
+
+                                    string bettingAnswer = Console.ReadLine();
+
+                                    while (int.TryParse(bettingAnswer, out betAmount) == false || betAmount > player.bettingMoney)
+                                    {
+                                        Console.WriteLine("Invalid amount for bet.");
+                                        Console.Write("How much would you like to bet this round?");
+                                        bettingAnswer = Console.ReadLine();
+                                        Console.WriteLine();
+                                    }
+
+
+                                    Console.WriteLine("" + player.name + ", is betting $" + betAmount + " this round!");
+
+
+                                }
 
 
                                 // Goes through check to see if they want the one card or three card version

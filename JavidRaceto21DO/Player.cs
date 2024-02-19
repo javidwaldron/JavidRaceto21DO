@@ -12,7 +12,7 @@ namespace JavidRaceto21DO
         public List<Card> cardsInHand = new List<Card>();
         public string name;
         public int score = 0;
-        public int bettingMoney = 100;
+        public int bettingMoney;
 
         public bool isActive = true;
         public bool isBetting = false;
