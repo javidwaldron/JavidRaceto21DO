@@ -15,6 +15,7 @@ namespace JavidRaceto21DO
 
         public bool gameEnd = false;
         public bool roundEnd = false;
+        public bool validPlayernumbers = false;
         Deck deck = new Deck();
         public int gamesplayed = 0;
 
@@ -23,10 +24,23 @@ namespace JavidRaceto21DO
 
         public void Setup()
         {
+
+            //Gets number of players using jay's code/ rebuking if invalid format entered
             gameEnd = false;
-            Console.WriteLine("How many players?");
+            Console.WriteLine("How many players? (Please enter a number between 2 & 8): ");
             Console.WriteLine();
-            int numberOfplayers = int.Parse(Console.ReadLine());
+            string howManyPlayers = Console.ReadLine();
+            int numberOfplayers;
+
+            while (int.TryParse(howManyPlayers, out numberOfplayers) == false
+                  || numberOfplayers < 1 || numberOfplayers > 8)
+            {
+                Console.WriteLine("Invalid number of players.");
+                Console.Write("How many players?");
+                howManyPlayers = Console.ReadLine();
+                Console.WriteLine();
+            }
+
             Console.WriteLine();
             Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
             Console.WriteLine();
@@ -107,7 +121,7 @@ namespace JavidRaceto21DO
             //Creating a list within a list for round by round play
             List<Player> currentPlayers = new List<Player>();
             
-            //Creating list to store player scores
+            //Creating list to store player scores, adds score if not 21 or over
             List<int> playerScore = new List<int>();
 
             //While the game isnt over
@@ -173,7 +187,7 @@ namespace JavidRaceto21DO
                                                 player.isStaying = true;
                                                 player.isActive = false;
                                                 Console.WriteLine();
-                                                Console.WriteLine("" + player.name + "'is staying with a final score of " + player.score + "/21.");
+                                                Console.WriteLine("" + player.name + " is staying with a final score of " + player.score + "/21.");
                                                 playerScore.Add(player.score);
                                                 turn++;
 
@@ -248,7 +262,7 @@ namespace JavidRaceto21DO
                                         {
                                             player.isActive = false;
                                             Console.WriteLine();
-                                            Console.WriteLine("" + player.name + "'is staying with a final score of " + player.score + "/21.");
+                                            Console.WriteLine("" + player.name + " is staying with a final score of " + player.score + "/21.");
                                             turn++;
                                             playerScore.Add(player.score);
                                         }
@@ -306,12 +320,8 @@ namespace JavidRaceto21DO
                 playerScore.Sort();
                 playerScore.Reverse();
                 
-                //Just for testing, delete later
-                for (int i = 0; i < playerScore.Count; i++)
-                {
-                    int number = playerScore[i];
-                    Console.WriteLine(number);
-                }
+                
+               
                // If busted is equal to total number of those currently playing, busted message plays
                 if(busted == currentPlayers.Count)
                 {
@@ -319,7 +329,7 @@ namespace JavidRaceto21DO
                     Console.WriteLine();
                 }
                
-
+                // Checks if someone has won and writes there name, if they havent and no one has one with twentyoneobtained varaible, writes name of person score equal to highest stored scores :)
                 foreach (Player player in players)
                 {    
                     if (player.hasWon)
@@ -333,7 +343,8 @@ namespace JavidRaceto21DO
                         {
                             if(player.score == playerScore[0])
                             {
-                                Console.WriteLine("" + player.name + " scored the highest this round, therefore is the winner!");
+                                Console.WriteLine("" + player.name + ", scored the highest this round, therefore is the winner!");
+                                Console.WriteLine();
                             }
                         }
                         else
