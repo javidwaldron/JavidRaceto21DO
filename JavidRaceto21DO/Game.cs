@@ -247,8 +247,11 @@ namespace JavidRaceto21DO
                                             Console.WriteLine("" + player.name + " has busted, sorry!");
                                             turn++;
                                             player.score = 0;
-                                            player.bettingMoney = player.bettingMoney - player.betAmount;
-                                            Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
+                                            if (player.isBetting == true)
+                                            {
+                                                player.bettingMoney = player.bettingMoney - player.betAmount;
+                                                Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
+                                            }
                                         }
                                     }
                                     // Sets game for player to be based on three cards
@@ -288,9 +291,11 @@ namespace JavidRaceto21DO
                                             player.score = 0;
                                             turn++;
                                             busted++;
-                                            player.bettingMoney = player.bettingMoney - player.betAmount;
-                                            Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
-
+                                            if (player.isBetting == true)
+                                            {
+                                                player.bettingMoney = player.bettingMoney - player.betAmount;
+                                                Console.WriteLine("" + player.name + " has lost $" + player.betAmount + "in cash! Making their new cash total $" + player.bettingMoney + "");
+                                            }
                                         }
                                         //Automatically stays if neither 21 or busting met
                                         else
@@ -350,7 +355,7 @@ namespace JavidRaceto21DO
             while (roundEnd == true)
             {
 
-
+                // if everyone backs out immediately asks if you want to do a new game
                 if (currentPlayers.Count == 0 || notactive == currentPlayers.Count)
                 {
                     Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++");
